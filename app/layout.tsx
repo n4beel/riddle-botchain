@@ -1,12 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cinzel, Alegreya, Inconsolata } from "next/font/google";
 import { EvmProvider } from "@/components/providers/EvmProvider";
 import { ToastProvider } from "@/components/ui/Toast";
 import { app } from "@/lib/app-config";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], display: "swap" });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
+const fontCinzel = Cinzel({
+  variable: "--font-cinzel",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const fontAlegreya = Alegreya({
+  variable: "--font-alegreya",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const fontInconsolata = Inconsolata({
+  variable: "--font-inconsolata",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: `${app.name} — ${app.tagline}`,
@@ -14,23 +29,22 @@ export const metadata: Metadata = {
   openGraph: { title: app.name, description: app.tagline, type: "website", url: app.url },
 };
 
-/** `width=device-width` plus a floor on zoom. Pinch-zoom stays available; nothing is locked out. */
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0A0A0A",
+  themeColor: "#F2E6C9",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full`}
-      // The project's accent, written once at the root. Every component reads `var(--accent)`, so
-      // this is the only place a palette change has to happen.
+      className={`${fontCinzel.variable} ${fontAlegreya.variable} ${fontInconsolata.variable} h-full`}
       style={{ ["--accent" as string]: app.accent }}
     >
-      <body className="min-h-full antialiased">
+      <body className="min-h-full antialiased font-serif bg-[var(--bg-base)] text-[var(--text-primary)]">
         <EvmProvider>
           <ToastProvider>{children}</ToastProvider>
         </EvmProvider>
