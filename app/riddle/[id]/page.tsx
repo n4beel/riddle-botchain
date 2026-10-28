@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, use } from "react";
-import { useAccount, useBlockNumber } from "wagmi";
+import { useAccount, useBlock, useBlockNumber } from "wagmi";
 import PageShell from "@/components/layout/PageShell";
 import ParchmentScroll from "@/components/scroll/ParchmentScroll";
 import SolverSlip from "@/components/scroll/SolverSlip";
@@ -19,6 +19,8 @@ export default function RiddleDetailPage({
 
   const { address } = useAccount();
   const { data: currentBlock } = useBlockNumber({ watch: true });
+  const { data: latestBlock } = useBlock({ watch: true });
+  const chainTime = latestBlock?.timestamp ? BigInt(latestBlock.timestamp) : undefined;
   const {
     fetchPuzzle,
     fetchCommitment,
@@ -134,6 +136,7 @@ export default function RiddleDetailPage({
             isCreator={isCreator}
             onReclaim={handleReclaim}
             reclaimLoading={isTransacting}
+            currentTime={chainTime}
           />
           <LimitationBlock />
         </div>
@@ -149,6 +152,7 @@ export default function RiddleDetailPage({
             onReveal={handleReveal}
             committing={isTransacting}
             revealing={isTransacting}
+            currentTime={chainTime}
           />
         </aside>
       </div>

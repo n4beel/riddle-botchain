@@ -8,6 +8,7 @@ interface ParchmentScrollProps {
   isCreator?: boolean;
   onReclaim?: () => void;
   reclaimLoading?: boolean;
+  currentTime?: bigint;
 }
 
 const MEDAL_STYLES = [
@@ -40,11 +41,12 @@ export default function ParchmentScroll({
   isCreator,
   onReclaim,
   reclaimLoading,
+  currentTime,
 }: ParchmentScrollProps) {
   const [p1, p2, p3] = payouts(puzzle.pool);
   const prizePools = [p1, p2, p3];
 
-  const now = Math.floor(Date.now() / 1000);
+  const now = currentTime ? Number(currentTime) : Math.floor(Date.now() / 1000);
   const isExpired = now >= Number(puzzle.deadline);
   const isReclaimable =
     !puzzle.reclaimed && (isExpired || puzzle.solved >= 3);

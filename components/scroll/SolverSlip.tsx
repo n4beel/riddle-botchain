@@ -23,6 +23,7 @@ interface SolverSlipProps {
   onReveal: (answer: string, salt: `0x${string}`) => Promise<void>;
   committing?: boolean;
   revealing?: boolean;
+  currentTime?: bigint;
 }
 
 export default function SolverSlip({
@@ -34,6 +35,7 @@ export default function SolverSlip({
   onReveal,
   committing = false,
   revealing = false,
+  currentTime,
 }: SolverSlipProps) {
   const { address, isConnected } = useAccount();
   const { data: currentBlock } = useBlockNumber({ watch: true });
@@ -63,6 +65,7 @@ export default function SolverSlip({
     userCommitBlock,
     userHasWon,
     currentBlock,
+    currentTime,
   });
 
   const isCreator =
