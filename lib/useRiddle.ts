@@ -19,11 +19,11 @@ import type { Puzzle } from "./riddle";
 
 export function useRiddle() {
   const chainId = useChainId();
-  const currentChainId: BotChainId = isBotChainId(chainId) ? chainId : 968;
+  const currentChainId: BotChainId = activeBotChain.id;
   const deployment = getDeployment(currentChainId);
   const deployed = isDeployed(currentChainId);
 
-  const publicClient = usePublicClient(); // stable-hook-result
+  const publicClient = usePublicClient({ chainId: activeBotChain.id }); // stable-hook-result
   const { data: walletClient } = useWalletClient(); // stable-hook-result
   const { address } = useAccount();
   const { toast } = useToast();
