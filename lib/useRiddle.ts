@@ -1,5 +1,7 @@
 "use client";
 
+import { activeBotChain } from "@/lib/botchain/chain";
+import { assertActiveChain, checkedWrite, waitSuccess } from "@/lib/useChainWrite";
 import { useState, useCallback } from "react";
 import {
   useAccount,
@@ -199,7 +201,8 @@ export function useRiddle() {
 
       setIsTransacting(true);
       try {
-        const hash = await walletClient.writeContract({
+        await assertActiveChain(walletClient);
+        const hash = await checkedWrite(walletClient, publicClient, {
           address: deployment.address,
           abi: riddleAbi,
           functionName: "create",
@@ -210,7 +213,7 @@ export function useRiddle() {
         setTxHash(hash);
         toast("info", "Inscribing riddle on the chain...");
 
-        const receipt = await publicClient.waitForTransactionReceipt({ hash });
+        const receipt = await waitSuccess(publicClient, hash);
         toast("success", "Riddle inscribed successfully!");
 
         // Parse return or log
@@ -236,7 +239,8 @@ export function useRiddle() {
 
       setIsTransacting(true);
       try {
-        const hash = await walletClient.writeContract({
+        await assertActiveChain(walletClient);
+        const hash = await checkedWrite(walletClient, publicClient, {
           address: deployment.address,
           abi: riddleAbi,
           functionName: "commitSolve",
@@ -246,7 +250,7 @@ export function useRiddle() {
         setTxHash(hash);
         toast("info", "Sealing your guess on-chain...");
 
-        await publicClient.waitForTransactionReceipt({ hash });
+        await waitSuccess(publicClient, hash);
         toast("success", "Guess sealed! Wait for the next block to reveal.");
         return true;
       } catch (err) {
@@ -269,7 +273,8 @@ export function useRiddle() {
 
       setIsTransacting(true);
       try {
-        const hash = await walletClient.writeContract({
+        await assertActiveChain(walletClient);
+        const hash = await checkedWrite(walletClient, publicClient, {
           address: deployment.address,
           abi: riddleAbi,
           functionName: "reveal",
@@ -279,7 +284,7 @@ export function useRiddle() {
         setTxHash(hash);
         toast("info", "Verifying your answer on-chain...");
 
-        await publicClient.waitForTransactionReceipt({ hash });
+        await waitSuccess(publicClient, hash);
         toast("success", "Answer proved! You have claimed your prize medal.");
         return true;
       } catch (err) {
@@ -302,7 +307,8 @@ export function useRiddle() {
 
       setIsTransacting(true);
       try {
-        const hash = await walletClient.writeContract({
+        await assertActiveChain(walletClient);
+        const hash = await checkedWrite(walletClient, publicClient, {
           address: deployment.address,
           abi: riddleAbi,
           functionName: "reclaim",
@@ -312,7 +318,7 @@ export function useRiddle() {
         setTxHash(hash);
         toast("info", "Reclaiming riddle funds...");
 
-        await publicClient.waitForTransactionReceipt({ hash });
+        await waitSuccess(publicClient, hash);
         toast("success", "Riddle pool reclaimed into your pending till!");
         return true;
       } catch (err) {
@@ -334,7 +340,8 @@ export function useRiddle() {
 
     setIsTransacting(true);
     try {
-      const hash = await walletClient.writeContract({
+      await assertActiveChain(walletClient);
+      const hash = await checkedWrite(walletClient, publicClient, {
         address: deployment.address,
         abi: riddleAbi,
         functionName: "withdraw",
@@ -343,7 +350,7 @@ export function useRiddle() {
       setTxHash(hash);
       toast("info", "Withdrawing BOT to your wallet...");
 
-      await publicClient.waitForTransactionReceipt({ hash });
+      await waitSuccess(publicClient, hash);
       toast("success", "Funds withdrawn to your wallet!");
       return true;
     } catch (err) {

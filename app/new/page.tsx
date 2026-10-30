@@ -188,7 +188,7 @@ export default function NewRiddlePage() {
                 </label>
                 <input
                   type="number"
-                  step="0.01"
+                  step="any"
                   min="0.01"
                   value={poolAmount}
                   onChange={(e) => setPoolAmount(e.target.value)}
